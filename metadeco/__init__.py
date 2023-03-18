@@ -11,13 +11,14 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 """
 
 
-import typing
 import sys
+import typing
 
 if sys.version_info.minor > 9:
     _F = typing.ParamSpec("_F")
 else:
     from typing_extensions import ParamSpec
+
     _F = ParamSpec("_F")  # type: ignore
 _R = typing.TypeVar("_R")
 
@@ -35,22 +36,40 @@ def __ensure_target(target: typing.Any, property: typing.Optional[str]) -> typin
     return final_target
 
 
-def metadata(key: str, value: typing.Any) -> typing.Callable[[typing.Callable[_F, _R]], typing.Callable[_F, _R]]:
+def metadata(
+    key: str, value: typing.Any
+) -> typing.Callable[[typing.Callable[_F, _R]], typing.Callable[_F, _R]]:
     def decorator(target: typing.Callable[_F, _R]) -> typing.Callable[_F, _R]:
         define_metadata(target, key, value, None)
         return target
+
     return decorator
 
 
-def define_metadata(target: typing.Any, key: str, value: typing.Any, property: typing.Optional[str] = None):
+def has_metadata(target: typing.Any, property: typing.Optional[str] = None) -> bool:
     final_target = __ensure_target(target, property)
 
-    if not hasattr(target, "metadata"):
+    return (
+        len(final_target.metadata) > 0 if hasattr(final_target, "metadata") else False
+    )
+
+
+def define_metadata(
+    target: typing.Any,
+    key: str,
+    value: typing.Any,
+    property: typing.Optional[str] = None,
+):
+    final_target = __ensure_target(target, property)
+
+    if not hasattr(final_target, "metadata"):
         final_target.metadata = {}
     final_target.metadata[key] = value
 
 
-def get_metadata(target: typing.Any, key: str, property: typing.Optional[str] = None) -> typing.Optional[typing.Any]:
+def get_metadata(
+    target: typing.Any, key: str, property: typing.Optional[str] = None
+) -> typing.Optional[typing.Any]:
     final_target = __ensure_target(target, property)
 
     if not hasattr(final_target, "metadata"):
@@ -66,13 +85,17 @@ def get_metadata(target: typing.Any, key: str, property: typing.Optional[str] = 
     return metadata[key]
 
 
-def list_metadata(target: typing.Any, property: typing.Optional[str] = None) -> typing.Dict[str, typing.Any]:
+def list_metadata(
+    target: typing.Any, property: typing.Optional[str] = None
+) -> typing.Dict[str, typing.Any]:
     final_target = __ensure_target(target, property)
 
     return final_target.metadata
 
 
-def delete_metadata(target: typing.Any, key: str, property: typing.Optional[str] = None) -> None:
+def delete_metadata(
+    target: typing.Any, key: str, property: typing.Optional[str] = None
+) -> None:
     final_target = __ensure_target(target, property)
 
     metadata = final_target.metadata
