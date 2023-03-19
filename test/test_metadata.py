@@ -10,23 +10,26 @@ class TestMetadata(unittest.TestCase):
 
         metadeco.define_metadata(to_test, "meta_test", True)
 
-        self.assertIsInstance(to_test.metadata, dict)
-        self.assertIs(to_test.metadata["meta_test"], True)
+        self.assertIsInstance(to_test.metadata, dict)  # type: ignore
+        self.assertIs(to_test.metadata["meta_test"], True)  # type: ignore
 
     def test_metadata_decorator(self) -> None:
         @metadeco.metadata("meta_test", True)
         def to_test():
             pass
 
-        self.assertIsInstance(to_test.metadata, dict)
-        self.assertIs(to_test.metadata["meta_test"], True)
+        self.assertIsInstance(to_test.metadata, dict)  # type: ignore
+        self.assertIs(to_test.metadata["meta_test"], True)  # type: ignore
 
     def test_has_metadata(self) -> None:
         @metadeco.metadata("meta_test", True)
-        def to_test(self):
+        def to_test():
             pass
 
         self.assertTrue(metadeco.has_metadata(to_test))
+        metadeco.delete_metadata(to_test, "meta_test")
+
+        self.assertFalse(metadeco.has_metadata(to_test))
 
     def test_get_metadata(self) -> None:
         @metadeco.metadata("meta_test", True)
