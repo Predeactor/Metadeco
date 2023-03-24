@@ -18,7 +18,6 @@ if sys.version_info.minor > 9:
     _F = typing.ParamSpec("_F")
 else:
     from typing_extensions import ParamSpec
-
     _F = ParamSpec("_F")  # type: ignore
 _R = typing.TypeVar("_R")
 
@@ -98,6 +97,8 @@ def delete_metadata(
 ) -> None:
     final_target = __ensure_target(target, property)
 
+    if not hasattr(final_target, "metadata"):
+        return
     metadata = final_target.metadata
 
     if key in metadata:
