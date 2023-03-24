@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "metadeco"
-version = "0.2.0"
+version = "0.2.1"
 description = "Metadeco allows you to set metadata to decorated objects."
 authors = ["Predeactor <pro.julien.mauroy@gmail.com>"]
 license = "MIT"

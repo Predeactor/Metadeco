@@ -14,6 +14,10 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 import sys
 import typing
 
+__author__ = "Predeactor"
+__authors__ = ["Predeactor <pro.julien.mauroy@gmail.com>"]
+__version__ = "0.2.1"
+
 if sys.version_info.minor > 9:
     _F = typing.ParamSpec("_F")
 else:
